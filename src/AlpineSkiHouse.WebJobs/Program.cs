@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 using Microsoft.Extensions.Configuration;
 using Microsoft.WindowsAzure.Storage;
 using Newtonsoft.Json.Linq;
-using ImageProcessorCore;
+//using ImageProcessorCore;
 using Microsoft.Azure.WebJobs;
 
 namespace AlpineSkiHouse.WebJobs
