@@ -124,6 +124,7 @@ namespace AlpineSkiHouse
             //        options.AppId = Configuration["auth:facebook:appid"];
             //        options.AppSecret = Configuration["auth:facebook:appsecret"];
             //    });
+            services.AddApplicationInsightsTelemetry(Configuration);
         }
 
         //public void Configure(IApplicationBuilder app, ILoggerFactory loggerfactory)
@@ -168,20 +169,24 @@ namespace AlpineSkiHouse
             applicationLifetime.ApplicationStopped.Register(Log.CloseAndFlush);
             // end of Serilog config
 
-            app.UseApplicationInsightsRequestTelemetry();
+
 
             if (env.IsDevelopment())
             {
                 app.UseDeveloperExceptionPage();
                 app.UseDatabaseErrorPage();
                 app.UseBrowserLink();
+
+                var builder = new ConfigurationBuilder()
+                    .SetBasePath(env.ContentRootPath)
+                    .AddJsonFile("appsettings.json");
+                builder.AddApplicationInsightsSettings(developerMode: true);
             }
             else
             {
                 app.UseExceptionHandler("/Home/Error");
             }
 
-            app.UseApplicationInsightsExceptionTelemetry();
 
             app.UseStaticFiles();
 
