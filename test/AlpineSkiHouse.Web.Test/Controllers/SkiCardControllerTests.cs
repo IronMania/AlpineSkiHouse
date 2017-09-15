@@ -102,7 +102,7 @@ namespace AlpineSkiHouse.Web.Tests.Controllers
                               _skiCard,
                               It.Is<IEnumerable<IAuthorizationRequirement>>(
                                   r => r.Count() == 1 && r.First() is EditSkiCardAuthorizationRequirement)))
-                    .Returns(Task.FromResult(false));
+                    .Returns(Task.FromResult(AuthorizationResult.Failed()));
 
                 var result = await controller.Edit(new EditSkiCardViewModel
                 {

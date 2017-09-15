@@ -26,6 +26,9 @@ using System.Globalization;
 using Microsoft.AspNetCore.Localization;
 using Microsoft.AspNetCore.Mvc.Razor;
 using AlpineSkiHouse.Conventions;
+using Microsoft.AspNetCore.Authentication.Facebook;
+using Microsoft.AspNetCore.Authentication.Twitter;
+using Microsoft.AspNetCore.Identity;
 
 namespace AlpineSkiHouse
 {
@@ -114,6 +117,14 @@ namespace AlpineSkiHouse
             // Add application services.
             services.AddTransient<IEmailSender, AuthMessageSender>();
             services.AddTransient<ISmsSender, AuthMessageSender>();
+
+            // If you want to tweak Identity cookies, they're no longer part of IdentityOptions.
+            services.ConfigureApplicationCookie(options => options.LoginPath = "/Account/LogIn");
+            //services.AddAuthentication()
+            //    .AddFacebook(options => {
+            //        options.AppId = Configuration["auth:facebook:appid"];
+            //        options.AppSecret = Configuration["auth:facebook:appsecret"];
+            //    });
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -166,22 +177,22 @@ namespace AlpineSkiHouse
             app.UseIdentity();
 
             // Add external authentication middleware below. To configure them please see http://go.microsoft.com/fwlink/?LinkID=532715
-            if (Configuration["Authentication:Facebook:AppId"] == null ||
-                Configuration["Authentication:Facebook:AppSecret"] == null ||
-                Configuration["Authentication:Twitter:ConsumerKey"] == null ||
-                Configuration["Authentication:Twitter:ConsumerSecret"] == null)
-                throw new KeyNotFoundException("A configuration value is missing for authentication against Facebook and Twitter. While you don't need to get tokens for these you do need to set up your user secrets as described in the readme.");
-            app.UseFacebookAuthentication(new FacebookOptions
-            {
-                AppId = Configuration["Authentication:Facebook:AppId"],
-                AppSecret = Configuration["Authentication:Facebook:AppSecret"]
-            });
+            //if (Configuration["Authentication:Facebook:AppId"] == null ||
+            //    Configuration["Authentication:Facebook:AppSecret"] == null ||
+            //    Configuration["Authentication:Twitter:ConsumerKey"] == null ||
+            //    Configuration["Authentication:Twitter:ConsumerSecret"] == null)
+            //    throw new KeyNotFoundException("A configuration value is missing for authentication against Facebook and Twitter. While you don't need to get tokens for these you do need to set up your user secrets as described in the readme.");
+            //app.UseFacebookAuthentication(new FacebookOptions
+            //{
+            //    AppId = Configuration["Authentication:Facebook:AppId"],
+            //    AppSecret = Configuration["Authentication:Facebook:AppSecret"]
+            //});
 
-            app.UseTwitterAuthentication(new TwitterOptions
-            {
-                ConsumerKey = Configuration["Authentication:Twitter:ConsumerKey"],
-                ConsumerSecret = Configuration["Authentication:Twitter:ConsumerSecret"]
-            });
+            //app.UseTwitterAuthentication(new TwitterOptions
+            //{
+            //    ConsumerKey = Configuration["Authentication:Twitter:ConsumerKey"],
+            //    ConsumerSecret = Configuration["Authentication:Twitter:ConsumerSecret"]
+            //});
             
             app.UseRequestLocalization(requestLocalizationOptions.Value);
 

@@ -8,6 +8,7 @@ using MediatR;
 using Moq;
 using System;
 using System.Linq;
+using System.Threading;
 using Xunit;
 
 namespace AlpineSkiHouse.Web.Tests.Handlers
@@ -61,7 +62,7 @@ namespace AlpineSkiHouse.Web.Tests.Handlers
                     var sut = new CreateScanHandler(context, dateService.Object, mediatorMock.Object);
                     var scanId = sut.Handle(createScan);
 
-                    mediatorMock.Verify(m => m.Publish(It.Is<CardScanned>(c => c.ScanId == scanId)));
+                    mediatorMock.Verify(m => m.Publish(It.Is<CardScanned>(c => c.ScanId == scanId),default(CancellationToken)));
                 }
             }
         }

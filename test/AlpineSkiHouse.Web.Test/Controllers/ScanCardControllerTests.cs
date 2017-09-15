@@ -18,6 +18,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Security.Claims;
+using System.Threading;
 using System.Threading.Tasks;
 using Xunit;
 
@@ -42,7 +43,7 @@ namespace AlpineSkiHouse.Web.Tests.Controllers
 
                     var result = controller.Get(124, 432);
 
-                    mediatorMock.Verify(m => m.Send(It.Is<CreateScan>(c => c.CardId == 124 && c.LocationId == 432)));
+                    mediatorMock.Verify(m => m.Send(It.Is<CreateScan>(c => c.CardId == 124 && c.LocationId == 432),default(CancellationToken)));
                 }
             }
         }
@@ -57,7 +58,7 @@ namespace AlpineSkiHouse.Web.Tests.Controllers
                 {
 
                     var mediatorMock = new Mock<IMediator>();
-                    mediatorMock.Setup(m => m.Send(It.Is<ResolvePass>(r => r.CardId == 124 && r.LocationId == 432))).Returns(default(Pass));
+                    mediatorMock.Setup(m => m.Send(It.Is<ResolvePass>(r => r.CardId == 124 && r.LocationId == 432), default(CancellationToken))).Returns(Task.FromResult(default(Pass)));
 
                     var dateServiceMock = new Mock<IDateService>();
                     dateServiceMock.Setup(d => d.Now()).Returns(DateTime.Now);
@@ -87,7 +88,7 @@ namespace AlpineSkiHouse.Web.Tests.Controllers
                     context.SaveChanges();
 
                     var mediatorMock = new Mock<IMediator>();
-                    mediatorMock.Setup(m => m.Send(It.Is<ResolvePass>(r => r.CardId == 124 && r.LocationId == 432))).Returns(pass);
+                    mediatorMock.Setup(m => m.Send(It.Is<ResolvePass>(r => r.CardId == 124 && r.LocationId == 432), default(CancellationToken))).Returns(Task.FromResult( pass));
 
                     var dateServiceMock = new Mock<IDateService>();
                     dateServiceMock.Setup(d => d.Now()).Returns(DateTime.Now);
@@ -113,8 +114,8 @@ namespace AlpineSkiHouse.Web.Tests.Controllers
                     context.SaveChanges();
 
                     var mediatorMock = new Mock<IMediator>();
-                    mediatorMock.Setup(m => m.Send(It.Is<CreateScan>(c => c.CardId == 124 && c.LocationId == 432))).Returns(555);
-                    mediatorMock.Setup(m => m.Send(It.Is<ResolvePass>(r => r.CardId == 124 && r.LocationId == 432))).Returns(pass);
+                    mediatorMock.Setup(m => m.Send(It.Is<CreateScan>(c => c.CardId == 124 && c.LocationId == 432), default(CancellationToken))).Returns(Task.FromResult(555));
+                    mediatorMock.Setup(m => m.Send(It.Is<ResolvePass>(r => r.CardId == 124 && r.LocationId == 432), default(CancellationToken))).Returns(Task.FromResult(pass));
 
                     var dateServiceMock = new Mock<IDateService>();
                     dateServiceMock.Setup(d => d.Now()).Returns(DateTime.Now);
@@ -123,7 +124,7 @@ namespace AlpineSkiHouse.Web.Tests.Controllers
 
                     var result = controller.Get(124, 432);
 
-                    mediatorMock.Verify(m => m.Send(It.Is<ActivatePass>(p => p.PassId == pass.Id && p.ScanId == 555)));
+                    mediatorMock.Verify(m => m.Send(It.Is<ActivatePass>(p => p.PassId == pass.Id && p.ScanId == 555), default(CancellationToken)));
                 }
             }
 
@@ -147,7 +148,7 @@ namespace AlpineSkiHouse.Web.Tests.Controllers
                     context.SaveChanges();
 
                     var mediatorMock = new Mock<IMediator>();
-                    mediatorMock.Setup(m => m.Send(It.Is<ResolvePass>(r => r.CardId == 124 && r.LocationId == 432))).Returns(pass);
+                    mediatorMock.Setup(m => m.Send(It.Is<ResolvePass>(r => r.CardId == 124 && r.LocationId == 432), default(CancellationToken))).Returns(Task.FromResult(pass));
 
                     var dateServiceMock = new Mock<IDateService>();
                     dateServiceMock.Setup(d => d.Now()).Returns(DateTime.Now);
@@ -177,8 +178,8 @@ namespace AlpineSkiHouse.Web.Tests.Controllers
                     context.SaveChanges();
 
                     var mediatorMock = new Mock<IMediator>();
-                    mediatorMock.Setup(m => m.Send(It.Is<CreateScan>(c => c.CardId == 124 && c.LocationId == 432))).Returns(555);
-                    mediatorMock.Setup(m => m.Send(It.Is<ResolvePass>(r => r.CardId == 124 && r.LocationId == 432))).Returns(pass);
+                    mediatorMock.Setup(m => m.Send(It.Is<CreateScan>(c => c.CardId == 124 && c.LocationId == 432), default(CancellationToken))).Returns(Task.FromResult<int>(555));
+                    mediatorMock.Setup(m => m.Send(It.Is<ResolvePass>(r => r.CardId == 124 && r.LocationId == 432), default(CancellationToken))).Returns(Task.FromResult(pass));
 
                     var dateServiceMock = new Mock<IDateService>();
                     dateServiceMock.Setup(d => d.Now()).Returns(DateTime.Now);
@@ -187,7 +188,7 @@ namespace AlpineSkiHouse.Web.Tests.Controllers
 
                     var result = controller.Get(124, 432);
 
-                    mediatorMock.Verify(m => m.Send(It.Is<ActivatePass>(p => p.PassId == pass.Id && p.ScanId == 555)),Times.Never);
+                    mediatorMock.Verify(m => m.Send(It.Is<ActivatePass>(p => p.PassId == pass.Id && p.ScanId == 555), default(CancellationToken)),Times.Never);
                 }
             }
         }

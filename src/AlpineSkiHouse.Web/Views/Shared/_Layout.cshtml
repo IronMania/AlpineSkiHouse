@@ -20,7 +20,7 @@
     </environment>
     <script src="~/jspm_packages/system.js"></script>
     <script src="~/js/jspmconfig.js"></script>
-    @Html.ApplicationInsightsJavaScript(TelemetryConfiguration)
+    @Html.Raw(snippet.FullScript)
 </head>
 
 <body>

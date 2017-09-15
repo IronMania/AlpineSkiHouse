@@ -8,6 +8,7 @@ using MediatR;
 using Moq;
 using System;
 using System.Linq;
+using System.Threading;
 using Xunit;
 
 namespace AlpineSkiHouse.Web.Tests.Handlers
@@ -55,7 +56,7 @@ namespace AlpineSkiHouse.Web.Tests.Handlers
                     var sut = new ActivatePassHandler(context, mediatorMock.Object);
                     var activationId = sut.Handle(activatePass);
 
-                    mediatorMock.Verify(m => m.Publish(It.Is<PassActivated>(c => c.PassActivationId == activationId)));
+                    mediatorMock.Verify(m => m.Publish(It.Is<PassActivated>(c => c.PassActivationId == activationId), default(CancellationToken)));
                 }
             }
         }

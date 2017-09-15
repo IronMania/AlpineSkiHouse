@@ -33,7 +33,7 @@ namespace AlpineSkiHouse.Web.Controllers
         {
             var scanId = _mediator.Send(new CreateScan { CardId = cardId, LocationId = locationId });
 
-            Pass pass = _mediator.Send(new ResolvePass { CardId = cardId, LocationId = locationId, DateTime =_dateService.Now() });
+            var pass = _mediator.Send(new ResolvePass { CardId = cardId, LocationId = locationId, DateTime =_dateService.Now() });
 
             if (pass == null)
             {
@@ -43,7 +43,7 @@ namespace AlpineSkiHouse.Web.Controllers
 
             if (!_passContext.PassActivations.Any(p => p.PassId == pass.Id))
             {
-                _mediator.Send(new ActivatePass { PassId = pass.Id, ScanId = scanId });
+                _mediator.Send(new ActivatePass { PassId = pass.Id, ScanId = scanId.Result });
             }
             
             //TODO: We might want to publish an event that a pass was validated at the current location
