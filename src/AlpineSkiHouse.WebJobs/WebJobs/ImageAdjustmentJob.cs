@@ -18,7 +18,7 @@ namespace AlpineSkiHouse.WebJobs.WebJobs
             var image = new Image(imageStream);
 
             var resizedImage = image
-                .Resize(100, 0)
+                .Resize(300, 0)
                 .Grayscale(GrayscaleMode.Bt709);
 
             resizedImage.SaveAsJpeg(resizedImageStream);

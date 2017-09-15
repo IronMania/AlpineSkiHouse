@@ -50,8 +50,8 @@ namespace AlpineSkiHouse
             // Add framework services.
             services.AddApplicationInsightsTelemetry(Configuration);
 
-            services.AddScoped<SingleInstanceFactory>(p => t => p.GetRequiredService(t));
-            services.AddScoped<MultiInstanceFactory>(p => t => p.GetServices(t));
+            //services.AddScoped<SingleInstanceFactory>(p => t => p.GetRequiredService(t));
+            //services.AddScoped<MultiInstanceFactory>(p => t => p.GetServices(t));
 
             services.AddMediatR(typeof(Startup).GetTypeInfo().Assembly);
 
@@ -73,11 +73,10 @@ namespace AlpineSkiHouse
             services.AddIdentity<ApplicationUser, IdentityRole>()
                 .AddEntityFrameworkStores<ApplicationUserContext>()
                 .AddDefaultTokenProviders();
-
             services.Configure<AzureStorageSettings>(Configuration.GetSection("MicrosoftAzureStorage"));
             services.AddTransient<IBlobFileUploadService, BlobFileUploadService>();
 
-            services.AddSingleton<IAuthorizationHandler, EditSkiCardAuthorizationHandler>();
+            //services.AddSingleton<IAuthorizationHandler, EditSkiCardAuthorizationHandler>();
 
             services.AddOptions();
             services.Configure<CsrInformationOptions>(Configuration.GetSection("CsrInformationOptions"));
@@ -127,6 +126,18 @@ namespace AlpineSkiHouse
             //    });
         }
 
+        //public void Configure(IApplicationBuilder app, ILoggerFactory loggerfactory)
+        //{
+        //    app.UseAuthentication();
+
+        //    app.UseMvc(routes =>
+        //    {
+        //        routes.MapRoute(
+        //            name: "default",
+        //            template: "{controller=Home}/{action=Index}/{id?}");
+        //    });
+        //}
+
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app, IHostingEnvironment env, ILoggerFactory loggerFactory, IApplicationLifetime applicationLifetime, IOptions<RequestLocalizationOptions> requestLocalizationOptions)
         {
@@ -146,7 +157,7 @@ namespace AlpineSkiHouse
             // Serilog config
             // comment out if using the default console logger
             Log.Logger = new LoggerConfiguration()
-                .MinimumLevel.Information()                
+                .MinimumLevel.Information()
                 .MinimumLevel.Override("AlpineSkiHouse", Serilog.Events.LogEventLevel.Debug)
                 .Enrich.FromLogContext()
                 .WriteTo.LiterateConsole()
@@ -174,7 +185,7 @@ namespace AlpineSkiHouse
 
             app.UseStaticFiles();
 
-            app.UseIdentity();
+            app.UseAuthentication();
 
             // Add external authentication middleware below. To configure them please see http://go.microsoft.com/fwlink/?LinkID=532715
             //if (Configuration["Authentication:Facebook:AppId"] == null ||
@@ -193,7 +204,7 @@ namespace AlpineSkiHouse
             //    ConsumerKey = Configuration["Authentication:Twitter:ConsumerKey"],
             //    ConsumerSecret = Configuration["Authentication:Twitter:ConsumerSecret"]
             //});
-            
+
             app.UseRequestLocalization(requestLocalizationOptions.Value);
 
             app.UseMvc(routes =>

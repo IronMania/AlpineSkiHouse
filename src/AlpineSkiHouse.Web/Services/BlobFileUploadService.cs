@@ -41,7 +41,7 @@ namespace AlpineSkiHouse.Services
 
             // publish event that image was uploaded
             await _bus.Publish(new SkiCardImageUploaded { FileName = targetFilename });
-            return blob?.Uri.ToString();
+            return blob.Uri.ToString();
         }
 
     }
